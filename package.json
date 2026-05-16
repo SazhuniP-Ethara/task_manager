@@ -1,0 +1,18 @@
+{
+  "name": "task_manager",
+  "version": "1.0.0",
+  "description": "A full-stack Team Task Manager application built with the MERN stack (MongoDB, Express, React, Node.js). It features role-based access control (Admin/Member), project tracking, task assignments, and a dynamic dashboard.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "build": "npm run build --prefix frontend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
