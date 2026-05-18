@@ -2,12 +2,14 @@ const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const mongoose = require('mongoose');
 
 dotenv.config();
 
 // Connect to database
-connectDB();
+mongoose.connect(process.env.MONGO_URI || process.env.MONGODB_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error(err));
 
 const app = express();
 
