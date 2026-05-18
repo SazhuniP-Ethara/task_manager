@@ -1,47 +1,60 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
 
-const taskSchema = new mongoose.Schema(
+const Task = sequelize.define(
+  "Task",
   {
     title: {
-      type: String,
-      required: [true, 'Please add a task title'],
-      trim: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
+
     description: {
-      type: String,
-      required: [true, 'Please add a task description'],
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
+
     priority: {
-      type: String,
-      enum: ['Low', 'Medium', 'High'],
-      default: 'Medium',
+      type: DataTypes.ENUM(
+        "Low",
+        "Medium",
+        "High"
+      ),
+      defaultValue: "Medium",
     },
+
     status: {
-      type: String,
-      enum: ['Pending', 'In Progress', 'Completed'],
-      default: 'Pending',
+      type: DataTypes.ENUM(
+        "Pending",
+        "In Progress",
+        "Completed"
+      ),
+      defaultValue: "Pending",
     },
+
     dueDate: {
-      type: Date,
-      required: [true, 'Please add a due date'],
+      type: DataTypes.DATE,
+      allowNull: false,
     },
+
     assignedMember: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: false,
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
+
     project: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Project',
-      required: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
+
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-module.exports = mongoose.model('Task', taskSchema);
+module.exports = Task;

@@ -22,7 +22,9 @@ const registerUser = async (req, res) => {
     }
 
     // Check if user exists
-    const userExists = await User.findOne({ email });
+   const userExists = await User.findOne({
+    where: { email }
+});
 
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
@@ -39,7 +41,9 @@ const registerUser = async (req, res) => {
     if (user) {
       // Auto-assign to existing projects and create dummy tasks
       try {
-        const projects = await Project.find().limit(2);
+        const projects = await Project.findAll({
+   limit: 2
+})
         if (projects.length > 0) {
           for (const project of projects) {
             // Add user to project members
@@ -155,8 +159,9 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     // Check for user email
-    const user = await User.findOne({ email }).select('+password');
-
+   const user = await User.findOne({
+   where: { email }
+});
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user.id,
@@ -206,8 +211,7 @@ const updateUserRole = async (req, res) => {
     if (!role || !['Admin', 'Member'].includes(role)) {
       return res.status(400).json({ message: 'Role must be Admin or Member' });
     }
-
-    const user = await User.findById(req.params.id);
+const user = await User.findByPk(req.params.id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -244,7 +248,9 @@ const deleteUser = async (req, res) => {
       return res.status(400).json({ message: 'You cannot delete your own account' });
     }
 
-    await User.findByIdAndDelete(req.params.id);
+    await User.destroy({
+   where: { id: req.params.id }
+});
     res.status(200).json({ message: 'User removed' });
   } catch (error) {
     res.status(500).json({ message: error.message });

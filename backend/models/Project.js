@@ -1,42 +1,46 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
 
-const projectSchema = new mongoose.Schema(
+const Project = sequelize.define(
+  "Project",
   {
     title: {
-      type: String,
-      required: [true, 'Please add a project title'],
-      trim: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
+
     description: {
-      type: String,
-      required: [true, 'Please add a project description'],
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
+
     startDate: {
-      type: Date,
-      default: Date.now,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
+
     dueDate: {
-      type: Date,
-      required: [true, 'Please add a due date'],
+      type: DataTypes.DATE,
+      allowNull: false,
     },
-    members: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
+
     status: {
-      type: String,
-      enum: ['Active', 'Completed', 'On Hold'],
-      default: 'Active',
+      type: DataTypes.ENUM(
+        "Active",
+        "Completed",
+        "On Hold"
+      ),
+      defaultValue: "Active",
     },
+
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-module.exports = mongoose.model('Project', projectSchema);
+module.exports = Project;
